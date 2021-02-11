@@ -22,7 +22,7 @@ def registerMember(member, photoId):
 
 def _saveNewPhoto(photo):
     photoId = str(uuid1())
-    filename = path.join(app.config["PHOTOS"], photoId)
+    filename = path.join(app.config["DATA"], photoId)
     npArr = np.frombuffer(b64decode(photo), dtype=np.uint8)
     img = cv2.imdecode(npArr, cv2.IMREAD_UNCHANGED)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
