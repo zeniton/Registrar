@@ -1,12 +1,14 @@
 from flask import Flask
 from os import path, makedirs
+from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'bfe24868cd233b3e9be322b976321a0f'
-app.config['DATA'] = '/tmp/registrar/photos'
+CORS(app)
+app.config['DATA'] = '/home/cava/projects/registrar/photos'
 
 from registrar import routes
 
-dir = app.config['DATA']
-makedirs(path.join(dir, 'faces'), exist_ok=True)
-makedirs(path.join(dir, 'training'), exist_ok=True)
+data = app.config['DATA']
+makedirs(data, exist_ok=True)
+makedirs(path.join(data, 'faces'), exist_ok=True)
+makedirs(path.join(data, 'training'), exist_ok=True)

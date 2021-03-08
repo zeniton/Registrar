@@ -1,3 +1,4 @@
+.vscode/
 venv/
 photos/
 **/__pycache__
