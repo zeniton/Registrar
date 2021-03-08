@@ -14,28 +14,32 @@
 
     <link rel="stylesheet" href="main.css" />
     <script src="main.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body onload="start()">
-    <button id="button" onclick="snapPhoto()">
-        Click me!
-    </button>
     <div class="output" id="message">
-Message to user
+        Message to user
     </div>
-
+    
     <div>
         <video id="video" width="640" height="480" autoplay></video>
     </div>
-
+    
     <div>
-        <canvas id="canvas" width="640" height="480"></canvas>
+        <canvas hidden id="canvas" width="640" height="480"></canvas>
     </div>
-
+    
     <div>
         <input type="text" id="userInput" >
     </div>
-
+    
+    <button id="button" class="btn btn-primary" onclick="snapPhoto()">
+        Click me!
+    </button>
 </body>
 
 </html>

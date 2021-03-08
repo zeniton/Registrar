@@ -19,7 +19,7 @@ function start() {
 }
 
 function test() { 
-    fetch(domain + '/test')
+    fetch(domain)
     .then(response => response.json())
     .then(json => console.log(json))
     .catch(data => console.log(data));
@@ -30,7 +30,7 @@ function snapPhoto() {
     canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
     
     console.log('Calling API...');
-    fetch('http://localhost:5000/v1/identify'
+    fetch(domain + '/v1/identify'
     , {
         method: 'post',
         body: JSON.stringify({ photo: canvas.toDataURL().split(',')[1].replace(' ', '+') }),

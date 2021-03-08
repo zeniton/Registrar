@@ -2,5 +2,4 @@
 venv/
 photos/
 **/__pycache__
-*.png
 *.swp

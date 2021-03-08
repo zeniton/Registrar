@@ -2,14 +2,13 @@ from flask import request, jsonify
 from registrar import app
 import registrar.api as api
 
-@app.route('/test', methods=['GET'])
+@app.route('/')
 def test():
-    return jsonify(message="Don't panic"), 200
+    return jsonify(message="Welcome to Registrar API"), 200
 
 
 @app.route('/v1/identify', methods=['POST'])
 def identify():
-    return jsonify(message="Don't panic"), 200
     photo = request.get_json(force=True).get('photo')
     if photo == None:
         return jsonify(message='No photo provided'), 400
