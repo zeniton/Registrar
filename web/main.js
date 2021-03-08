@@ -1,4 +1,5 @@
 var api = 'http://localhost:5000';
+var photoGuid = '';
 
 function test() { 
     fetch(api)
@@ -16,15 +17,11 @@ class Member {
 }
 
 function start() {
-    let msg = document.getElementById('message');
-    let userInput = document.getElementById('userInput');
-    let button = document.getElementById('button');
+    document.getElementById('message').innerText = 'Please look at the camera';
+    document.getElementById('userInput').hidden = true;
+    document.getElementById('button').hidden = false;
+    
     let video = document.getElementById('video');
-    
-    msg.innerText = 'Please look at the camera';
-    userInput.hidden = true;
-    button.hidden = false;
-    
     navigator.mediaDevices.getUserMedia({video: true})
     .then((stream) => {
         video.srcObject = stream;
@@ -36,19 +33,64 @@ function snapPhoto() {
     let canvas = document.getElementById('canvas');
     canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
     
-    fetch(`${api}/v1/identify`, {
+    let payload = {
         method: 'post',
-        body: JSON.stringify({ photo: canvas.toDataURL().split(',')[1].replace(' ', '+') }),
+        headers: 'application/json',
+        body: JSON.stringify(photo=canvas.toDataURL().split(',')[1].replace(' ', '+'))
+    };
+    fetch(`${api}/v1/identify`, payload)
+    .then(response => {
+        let json = reponse.json(); 
+        switch (response.status) {
+            case 200: //Member recognised (but may be wrong...)
+                photoGuid = json.photoGuid;
+                showMember(json.member);
+                break;
+            case 404: //Member not recognised
+                photoGuid = json.photoGuid;
+                getMemberId();
+                break;
+            case 400: //Bad photo
+                //TODO
+                break;
+                default:
+                    console.log(response);
+        }
     })
-    .then(response => response.json())
-    .then(json => showMember(json))
-    .catch(data => console.log(data));
+    .catch(error => console.log(error));
 }
 
 function showMember(json) {
-    let msg = document.getElementById('message');
-    let button = document.getElementById('button');
     member = json.member;
-    msg.innerText = `Please confirm that you are ${member.name} ${member.surname} (${member.id})`;
+    let message = `Please confirm that you are ${member.name} ${member.surname} (${member.id})`;
+    document.getElementById('message').innerText = message;
+    let button = document.getElementById('button');
     button.innerText = 'Confirm';
+}
+
+function getMemberId() {
+    document.getElementById('message').innerText = 'Please enter your membership number';
+    let userInput = document.getElementById('userInput');
+    userInput.innerText = '';
+    userInput.hidden = false;
+    
+    let button = document.getElementById('button')
+    button.innerText = 'Register me!';
+    button.onclick = () => {
+        button.removeAttribute('onclick');
+        registerMember(userInput.innerText);
+    }
+}
+
+function registerMember(memberId) {
+    let payload = {
+        method: 'post',
+        headers: 'application/json',
+        body: JSON.stringify({ photoGuid=photoGuid, memberId=memberId })
+        };
+    fetch(`${api}/v1/register`, payload)
+    .then()
+    .catch(error => console.log(error));
+    
+    start(); //Do it all again...
 }
