@@ -20,25 +20,23 @@ def identifyMember(base64photo):
 
 
 def _recogniseMember(npArr):
+    #TODO: Implement
     return { 'id': '052450', 'name': 'Stoffel', 'surname': 'van Aswegen' }
 
 
-def registerMember(member, photoGuid):
+def registerMember(memberId, photoGuid):
     """Record the member's presence at the meeting
     Returns:
-        member object if identified, else None
+        member object if identified by memberId, else None
     """
     return None
 
 
 def _savePhoto(base64photo):
     """Save the image in the root directory"""
-    # try:
     npArr = np.frombuffer(b64decode(base64photo), dtype=np.uint8)
     img = cv2.imdecode(npArr, cv2.IMREAD_UNCHANGED)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # except:
-    #     return None, None
 
     photoGuid = str(uuid1())
     filename = path.join(app.config['DATA'], photoGuid)

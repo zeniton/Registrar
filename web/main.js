@@ -1,4 +1,16 @@
-var api = 'http://localhost:5000';
+const api = 'http://localhost:5000';
+const HTTPstatus = {
+    OK: 200,
+    CREATED: 201,
+    BADREQUEST: 400,
+    NOTFOUND: 404
+}
+const MessageType = {
+    START: 1,
+    CONFIRM: 2,
+    WELCOME: 3
+}
+
 var photoGuid = '';
 
 class Member {
@@ -9,37 +21,30 @@ class Member {
         this.language = language;
         this.phone = phone;
         this.email = email;
-    }
-}
+    }    
+}    
 
 function test() { 
     fetch(api)
     .then(response => console.log(response.json()))
-    .catch(data => console.log(data));
-}    
+    .catch(error => console.log(error));
+}        
 
-const MsgEnum = {
-    START: 1,
-    CONFIRM: 2,
-    WELCOME: 3
-}
-Object.freeze(MsgEnum);
-
-function getMessage(msgEnum, member) {
+function getMessage(msgType, member) {
     if (member == null || member.language == 'A') {
-        switch (msgEnum) {
-            case MsgEnum.START:
+        switch (msgType) {
+            case MessageType.START:
                 return 'Kyk asb vir die kamera';
-            case MsgEnum.CONFIRM:
+            case MessageType.CONFIRM:
                 return 'Bevestig asb...';
             case msgEnum.WELCOME:
                 return `Welkom ${member.name}! Jy is geregistreer vir die vergadering.`
         }
     } else {
         switch (msgEnum) {
-            case MsgEnum.START:
+            case MessageType.START:
                 return 'Please look at the camera';
-            case MsgEnum.CONFIRM:
+            case MessageType.CONFIRM:
                 return `Please confirm that you are `;
             case msgEnum.WELCOME:
                 return `Welcome ${member.name}! You are registered for the meeting.`
@@ -48,7 +53,7 @@ function getMessage(msgEnum, member) {
 }
 
 function start() {
-    document.getElementById('message').innerText = getMessage(MsgEnum.START, null);
+    document.getElementById('message').innerText = getMessage(MessageType.START, null);
     document.getElementById('userInput').hidden = true;
     document.getElementById('button').hidden = false;
     
@@ -73,15 +78,15 @@ function snapPhoto() {
     .then(response => {
         let json = reponse.json(); 
         switch (response.status) {
-            case 200: //Member recognised (but may be wrong...)
+            case HTTPstatus.OK: //Someone was recognised...
                 photoGuid = json.photoGuid;
                 showMember(json.member);
                 break;
-            case 404: //Member not recognised
+            case HTTPstatus.NOTFOUND: //Unknown member in photo
                 photoGuid = json.photoGuid;
                 getMemberId();
                 break;
-            case 400: //Bad photo
+            case HTTPstatus.BADREQUEST: //Bad photo
                 //TODO
                 break;
                 default:
@@ -91,10 +96,10 @@ function snapPhoto() {
     .catch(error => console.log(error));
 }
 
+//TODO: the next 2 functions must be combined
 function showMember(json) {
     member = json.member;
-    let message = `${getMessage(MsgEnum.CONFIRM)} ${member.name} ${member.surname} (${member.id})`;
-    document.getElementById('message').innerText = message;
+    document.getElementById('message').innerText = getMessage(MessageType.CONFIRM, member);
     let button = document.getElementById('button');
     button.innerText = 'Confirm';
 }
@@ -122,10 +127,10 @@ function registerMember(memberId) {
     .then(response => {
         let json = response.json(); 
         switch (response.status) {
-            case 200: //All good
+            case HTTPstatus.CREATED: //Attendence recorded
                 welcomeMember(json.member);
                 break;
-            case 404: //Member not on record
+            case HTTPstatus.NOTFOUND: //Membership number unknown
                 break;
         }
     })
