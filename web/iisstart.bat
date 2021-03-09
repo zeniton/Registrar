@@ -1,1 +1,1 @@
-"C:\Program Files\IIS Express\iisexpress" /path:C:\users\stoff\projects\registrar\web\ /port:8080
+"C:\Program Files\IIS Express\iisexpress"

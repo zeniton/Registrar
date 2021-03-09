@@ -8,7 +8,7 @@ import cv2
 def identifyMember(base64photo):
     """Identify the member from a photo
     Returns:
-        member object, if identified else None
+        member object if identified, else None
         GUID of the photo, None if invalid image
     """
     photoGuid, npArr = _savePhoto(base64photo)
@@ -23,9 +23,12 @@ def _recogniseMember(npArr):
     return { 'id': '052450', 'name': 'Stoffel', 'surname': 'van Aswegen' }
 
 
-def registerMember(member, photoId):
-    """Record the member's presence at the meeting"""
-    pass
+def registerMember(member, photoGuid):
+    """Record the member's presence at the meeting
+    Returns:
+        member object if identified, else None
+    """
+    return None
 
 
 def _savePhoto(base64photo):
