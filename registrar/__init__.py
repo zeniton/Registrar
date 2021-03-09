@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 CORS(app)
-app.config['DATA'] = os.path.join('C:\\', 'users', 'stoff', 'projects', 'registrar', 'photos')
+app.config['DATA'] = os.path.join('C:\\', 'users', 'stoff', 'projects', 'registrar', 'data')
 
 from registrar import routes
 
