@@ -1,6 +1,6 @@
 from registrar import app
 from uuid import uuid1
-from os import path
+from os import path, rename, makedirs
 from base64 import b64decode
 import numpy as np
 import cv2
@@ -29,6 +29,14 @@ def registerMember(memberId, photoGuid):
     Returns:
         member object if identified by memberId, else None
     """
+    #Move the new face to the member's directory
+    memberId = f'{int(memberId):06d}'
+    srcDir = path.join(app.config['DATA'], 'faces')
+    dstDir = path.join(srcDir, memberId)
+    makedirs(dstDir, exist_ok=True)
+    rename(path.join(srcDir, photoGuid), path.join(dstDir, photoGuid))
+
+    #TODO: get member from database
     return None
 
 
