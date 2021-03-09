@@ -5,7 +5,9 @@ import registrar.api as api
 
 @app.route('/')
 def test():
-    return jsonify(message="Welcome to Registrar API"), HTTPStatus.OK
+    member = api.test()
+    return jsonify(member=member), HTTPStatus.OK
+    # return jsonify(message="Welcome to Registrar API"), HTTPStatus.OK
 
 
 @app.route('/v1/identify', methods=['POST'])
