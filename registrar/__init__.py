@@ -10,8 +10,8 @@ app.config['DATA'] = os.path.join('C:\\', 'users', 'stoff', 'projects', 'registr
 
 members = {}
 
-from registrar import routes, api
-api._readMembers()
+from registrar import routes, helpers
+helpers._readMembers()
 data = app.config['DATA']
 makedirs(data, exist_ok=True)
 makedirs(path.join(data, 'faces'), exist_ok=True)
