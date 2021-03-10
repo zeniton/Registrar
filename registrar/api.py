@@ -11,6 +11,7 @@ def test():
     global members
     return members['052450']
 
+
 def identifyMember(base64photo):
     """Identify the member from a photo
     Returns:
@@ -23,12 +24,6 @@ def identifyMember(base64photo):
     else:
         member = _recogniseMember(npArr)
         return member, photoGuid
-
-
-def _recogniseMember(npArr):
-    #TODO: Implement
-    global members
-    return members['052450']
 
 
 def registerMember(memberId, photoGuid):
@@ -45,6 +40,12 @@ def registerMember(memberId, photoGuid):
 
     global members
     return members[memberId] if memberId in members else None 
+
+
+def _recogniseMember(npArr):
+    #TODO: Implement
+    global members
+    return members['052450']
 
 
 def _savePhoto(base64photo):

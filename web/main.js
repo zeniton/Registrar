@@ -13,17 +13,6 @@ const MessageType = {
 
 var photoGuid = '';
 
-class Member {
-    constructor(id, name, surname, language, phone, email) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.language = language;
-        this.phone = phone;
-        this.email = email;
-    }    
-}    
-
 function test() { 
     fetch(api)
     .then(response => console.log(response.json()))
