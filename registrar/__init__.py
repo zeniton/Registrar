@@ -7,6 +7,7 @@ import csv
 app = Flask(__name__)
 CORS(app)
 app.config['DATA'] = os.path.join('C:\\', 'users', 'stoff', 'projects', 'registrar', 'data')
+app.config['OPENCV'] = os.path.join('C:\\', 'users', 'stoff', 'projects', 'registrar', 'opencv')
 
 members = {}
 

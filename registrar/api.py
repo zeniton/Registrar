@@ -1,10 +1,10 @@
 from registrar import app, members
+import registrar.faces as faces
 from uuid import uuid1
 from os import path, rename, makedirs
 from base64 import b64decode
 import numpy as np
 import cv2
-import csv
 
 
 def test():
@@ -18,12 +18,15 @@ def identifyMember(base64photo):
         member object if identified, else None
         GUID of the photo, None if invalid image
     """
-    photoGuid, npArr = _savePhoto(base64photo)
-    if photoGuid == None:
-        return None, None
-    else:
-        member = _recogniseMember(npArr)
-        return member, photoGuid
+    photoGuid, image = _savePhoto(base64photo)
+    if photoGuid == None: return None, None
+
+    face = faces.detectFace(image)
+    if face == None: return None, None #No face in photo
+
+    if not faces.saveFace(face, image, photoGuid): return None, None #Failed to create jpg
+    member = _recogniseMember(image)
+    return member, photoGuid
 
 
 def registerMember(memberId, photoGuid):
@@ -60,19 +63,4 @@ def _savePhoto(base64photo):
     return photoGuid, npArr
 
 
-def _readMembers():
-    global members
-    with open(path.join(app.config['DATA'], 'members', 'members.csv')) as f:
-        reader = csv.DictReader(f, quotechar='"')
-        for row in reader:
-            memberId = row['Mem No'].replace('\t','')
-            memberId = f"{int(memberId):06d}"
-            member = { 
-                'name': row['Preferred Name'],
-                'surname': row['Surname'],
-                'language': row['Language'][0:1],
-                'email': row['E-mail address'],
-                'phone': row['Mobile No'].replace('\t','')
-                }
-            members[memberId] = member
  
